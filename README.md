@@ -1,37 +1,37 @@
 # XML to PostgreSQL Extractor
 
-Công cụ trích xuất dữ liệu từ các file XML địa chính và import vào cơ sở dữ liệu PostgreSQL với hỗ trợ multithreading.
+A tool for extracting data from cadastral XML files and importing them into a PostgreSQL database with multithreading support.
 
-## Tính năng
+## Features
 
-- ✅ Quét và xử lý tự động các thư mục XML
-- ✅ Multithreading với 10 luồng mặc định (có thể tùy chỉnh)
-- ✅ Trích xuất dữ liệu vào 4 bảng: `thuadat`, `canhan`, `giaychungnhan`, `hoso`
-- ✅ Xử lý foreign key constraints tự động
-- ✅ Batch insertion với conflict handling
+- ✅ Automatic scanning and processing of XML directories
+- ✅ Multithreading with 10 default threads (customizable)
+- ✅ Extracts data into 4 tables: `thuadat`, `canhan`, `giaychungnhan`, `hoso`
+- ✅ Automatic foreign key constraint handling
+- ✅ Batch insertion with conflict handling
 - ✅ Thread-safe statistics tracking
 
-## Yêu cầu
+## Requirements
 
 - Python 3.7+
 - PostgreSQL database
-- Các thư viện trong `requirements_xml_extractor.txt`
+- Libraries listed in `requirements_xml_extractor.txt`
 
-## Cài đặt
+## Installation
 
 ```bash
 pip install -r requirements_xml_extractor.txt
 ```
 
-## Sử dụng
+## Usage
 
-### Cơ bản
+### Basic
 
 ```bash
 python extract_xml_to_db.py --xml-dir "G:\So lieu day 04.11"
 ```
 
-### Với tùy chọn đầy đủ
+### With Full Options
 
 ```bash
 python extract_xml_to_db.py \
@@ -45,18 +45,18 @@ python extract_xml_to_db.py \
   --limit 100
 ```
 
-### Các tham số
+### Parameters
 
-- `--host`: Database host (mặc định: localhost)
-- `--port`: Database port (mặc định: 5432)
-- `--database`: Tên database (mặc định: cadastral_db)
-- `--user`: Database user (mặc định: postgres)
-- `--password`: Database password (mặc định: postgres)
-- `--xml-dir`: Thư mục chứa các file XML
-- `--threads`: Số lượng worker threads (mặc định: 10)
-- `--limit`: Giới hạn số file xử lý (dùng cho testing)
+- `--host`: Database host (default: localhost)
+- `--port`: Database port (default: 5432)
+- `--database`: Database name (default: cadastral_db)
+- `--user`: Database user (default: postgres)
+- `--password`: Database password (default: postgres)
+- `--xml-dir`: Directory containing XML files
+- `--threads`: Number of worker threads (default: 10)
+- `--limit`: Limit number of files to process (for testing)
 
-### Sử dụng biến môi trường
+### Using Environment Variables
 
 ```bash
 export DB_HOST=localhost
@@ -68,30 +68,39 @@ export DB_PASSWORD=your_password
 python extract_xml_to_db.py --xml-dir "G:\So lieu day 04.11"
 ```
 
-## Cấu trúc Database
+## Database Schema
 
-Tool tự động tạo các bảng sau:
+The tool automatically creates the following tables:
 
 ### thuadat
-Thông tin thửa đất với các trường: thuaDatID, maDVHCXa, soHieuToBanDo, dienTich, voID, chongID, etc.
+Land parcel information with fields: thuaDatID, maDVHCXa, soHieuToBanDo, dienTich, voID, chongID, etc.
 
 ### canhan
-Thông tin cá nhân với các trường: caNhanID, hoTen, namSinh, gioiTinh, soGiayTo, etc.
+Individual person information with fields: caNhanID, hoTen, namSinh, gioiTinh, soGiayTo, etc.
 
 ### giaychungnhan
-Thông tin giấy chứng nhận với các trường: giayChungNhanID, soVaoSo, ngayCap, maVach, etc.
+Certificate information with fields: giayChungNhanID, soVaoSo, ngayCap, maVach, etc.
 
 ### hoso
-Thông tin hồ sơ với các trường: thanhPhanHoSoID, hoSoDangKySoID, giayChungNhanID, loaiGiayTo, etc.
+Document/file information with fields: thanhPhanHoSoID, hoSoDangKySoID, giayChungNhanID, loaiGiayTo, etc.
 
 ## Multithreading
 
-Tool sử dụng `ThreadPoolExecutor` để xử lý song song nhiều file XML:
-- Mỗi thread có connection database riêng
+The tool uses `ThreadPoolExecutor` to process multiple XML files in parallel:
+- Each thread has its own database connection
 - Thread-safe statistics tracking
-- Tự động commit và đóng connection sau khi xử lý xong
+- Automatic commit and connection closure after processing
+
+## Performance
+
+With multithreading enabled, the tool can process multiple XML files simultaneously, significantly improving processing speed compared to single-threaded execution.
+
+## Error Handling
+
+- Failed files are tracked and reported in the summary
+- Database transactions are rolled back on errors
+- Processing continues even if individual files fail
 
 ## License
 
 MIT
-
