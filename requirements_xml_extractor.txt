@@ -1,0 +1,15 @@
+# Requirements for XML to PostgreSQL Extraction Tool
+
+# PostgreSQL database adapter
+psycopg2-binary>=2.9.0
+
+# Alternative (if you prefer to compile from source):
+# psycopg2>=2.9.0
+
+# Note: No other dependencies required!
+# The tool uses only Python standard library modules:
+# - xml.etree.ElementTree (XML parsing)
+# - argparse (CLI)
+# - os, sys, pathlib (file operations)
+# - datetime (date handling)
+
